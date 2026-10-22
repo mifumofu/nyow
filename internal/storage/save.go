@@ -6,18 +6,19 @@ import (
 	"os"
 	"path"
 	"runtime"
+	"uuid"
 
 	"github.com/mifumofu/nyow"
 )
 
 // save the user's state to a location based on their platform's standards
-func SaveState(i []nyow.Item, appname string) error {
+func SaveState(i JSON, appname string) error {
 	sd, err := userStateFile(appname)
 	if err != nil {
 		return err
 	}
 
-	b, err := json.Marshal(i)
+	b, err := json.Marshal(i.items)
 	if err != nil {
 		return err
 	}
@@ -31,27 +32,33 @@ func SaveState(i []nyow.Item, appname string) error {
 }
 
 // loads the user's state from a file based on their platform's standards
-func LoadState(appname string) ([]nyow.Item, error) {
+func LoadState(appname string) (nyow.Provider, error) {
 	sd, err := userStateFile(appname)
 	if err != nil {
-		return []nyow.Item{}, err
+		return nil, err
 	}
 
 	b, err := os.ReadFile(sd)
 	if errors.Is(err, os.ErrNotExist) {
-		return []nyow.Item{}, nil
+		return &JSON{items: make(map[uuid.UUID]nyow.Item)}, nil
 
 	} else if err != nil {
 		return nil, err
 	}
 
-	var d []nyow.Item
+	var d map[uuid.UUID]nyow.Item
 	err = json.Unmarshal(b, &d)
 	if err != nil {
 		return nil, err
 	}
 
-	return d, err
+	// make if nil after unmarshalling so it doesn't get
+	// overriden with nil
+	if d == nil {
+		d = make(map[uuid.UUID]nyow.Item)
+	}
+
+	return &JSON{items: d}, err
 }
 
 // Gets the standard state directory for the user's platform.
