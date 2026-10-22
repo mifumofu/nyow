@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/mifumofu/nyow"
 	"github.com/mifumofu/nyow/internal/storage"
@@ -37,12 +38,15 @@ func init() {
 			},
 		},
 		Action: func(ctx context.Context, c *cli.Command) error {
-			return provider.Add(nyow.Item{
+			item := nyow.Item{
 				Category:    nyow.Category(c.StringArg("category")),
 				Description: c.StringArg("description"),
 				Start:       c.TimestampArg("begin"),
 				End:         c.TimestampArg("end"),
-			})
+			}
+
+			fmt.Printf("added session with description \"%v\" of category \"%v\"", item.Description, item.Category)
+			return provider.Add(item)
 		},
 		After: func(ctx context.Context, c *cli.Command) error {
 			p, ok := provider.(*storage.JSON)

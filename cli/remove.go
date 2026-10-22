@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"uuid"
 
 	"github.com/mifumofu/nyow/internal/storage"
@@ -26,6 +27,7 @@ func init() {
 				return err
 			}
 
+			fmt.Printf("removed session %v\n", u)
 			return provider.Remove(u)
 		},
 		After: func(ctx context.Context, c *cli.Command) error {
@@ -33,6 +35,7 @@ func init() {
 			if ok {
 				return storage.SaveState(*p, "nyow")
 			}
+
 			return nil
 		},
 	})
