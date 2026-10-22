@@ -29,6 +29,11 @@ func (j *JSON) Remove(u uuid.UUID) error {
 func (j *JSON) List(after time.Time) []nyow.Item {
 	s := slices.Collect(maps.Values(j.items))
 
+	// return all entries if after filter not filled in
+	if after.IsZero() {
+		return s
+	}
+
 	var v []nyow.Item
 	for _, i := range s {
 		if i.Start.After(after) {
