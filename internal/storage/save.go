@@ -6,6 +6,7 @@ import (
 	"os"
 	"path"
 	"runtime"
+	"time"
 	"uuid"
 
 	"github.com/mifumofu/nyow"
@@ -18,7 +19,7 @@ func SaveState(i JSON, appname string) error {
 		return err
 	}
 
-	b, err := json.Marshal(i.items)
+	b, err := json.Marshal(i)
 	if err != nil {
 		return err
 	}
@@ -40,13 +41,16 @@ func LoadState(appname string) (nyow.Provider, error) {
 
 	b, err := os.ReadFile(sd)
 	if errors.Is(err, os.ErrNotExist) {
-		return &JSON{items: make(map[uuid.UUID]nyow.Item)}, nil
+		return &JSON{
+			Items:    make(map[uuid.UUID]nyow.Item),
+			Trackers: make(map[nyow.Category]time.Time),
+		}, nil
 
 	} else if err != nil {
 		return nil, err
 	}
 
-	var d map[uuid.UUID]nyow.Item
+	var d JSON
 	err = json.Unmarshal(b, &d)
 	if err != nil {
 		return nil, err
@@ -54,11 +58,14 @@ func LoadState(appname string) (nyow.Provider, error) {
 
 	// make if nil after unmarshalling so it doesn't get
 	// overriden with nil
-	if d == nil {
-		d = make(map[uuid.UUID]nyow.Item)
+	if d.Items == nil {
+		d.Items = make(map[uuid.UUID]nyow.Item)
+	}
+	if d.Trackers == nil {
+		d.Trackers = make(map[nyow.Category]time.Time)
 	}
 
-	return &JSON{items: d}, err
+	return &d, err
 }
 
 // Gets the standard state directory for the user's platform.
