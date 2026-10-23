@@ -27,19 +27,31 @@ func (j *JSON) Remove(u uuid.UUID) error {
 	return nil
 }
 
-func (j *JSON) List(after time.Time) []nyow.Item {
+func (j *JSON) List(options *nyow.ListOptions) []nyow.Item {
 	s := slices.Collect(maps.Values(j.Items))
 
-	// return all entries if after filter not filled in
-	if after.IsZero() {
+	if options == nil {
 		return s
 	}
 
 	var v []nyow.Item
 	for _, i := range s {
-		if i.Start.After(after) {
-			v = append(v, i)
+		// filter based on occur before
+		if options.Before != nil && !i.Start.Before(*options.Before) {
+			continue
 		}
+
+		// filter based on occur after
+		if options.After != nil && !i.Start.After(*options.After) {
+			continue
+		}
+
+		// filter based on category
+		if options.Category != nil && !slices.Contains(*options.Category, i.Category) {
+			continue
+		}
+
+		v = append(v, i)
 	}
 
 	return v

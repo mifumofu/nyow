@@ -26,11 +26,17 @@ func (i Item) Duration() time.Duration {
 type Provider interface {
 	Add(Item) error
 	Remove(uuid.UUID) error
-	List(after time.Time) []Item
+	List(*ListOptions) []Item
 
 	// starts a tracker on a category
 	TrackStart(Category) error
 
 	// ends a tracker for a category and provide description for session
 	TrackEnd(Category, string) (Item, error)
+}
+
+type ListOptions struct {
+	Before   *time.Time
+	After    *time.Time
+	Category *[]Category
 }
