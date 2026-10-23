@@ -66,9 +66,7 @@ func init() {
 			}
 
 			items := provider.List(conf)
-			for _, x := range items {
-				fmt.Printf("%v - [%v] %v\n", x.ID, x.Category, x.Description)
-			}
+			fmt.Println(printItems(items))
 			return nil
 		},
 	})
