@@ -38,7 +38,7 @@ func init() {
 			},
 		},
 		Action: func(ctx context.Context, c *cli.Command) error {
-			item := nyow.Item{
+			item := nyow.Session{
 				Category:    nyow.Category(c.StringArg("category")),
 				Description: c.StringArg("description"),
 				Start:       c.TimestampArg("begin"),

@@ -11,7 +11,7 @@ type Category string
 var ErrNotExist = errors.New("This entry does not exist")
 var ErrTrackAlreadyStarted = errors.New("This current tracker has already been started.")
 
-type Item struct {
+type Session struct {
 	ID uuid.UUID
 	Category
 	Description string
@@ -19,20 +19,20 @@ type Item struct {
 	End         time.Time
 }
 
-func (i Item) Duration() time.Duration {
+func (i Session) Duration() time.Duration {
 	return i.End.Sub(i.Start)
 }
 
 type Provider interface {
-	Add(Item) error
+	Add(Session) error
 	Remove(uuid.UUID) error
-	List(*ListOptions) []Item
+	List(*ListOptions) []Session
 
 	// starts a tracker on a category
 	TrackStart(Category) error
 
 	// ends a tracker for a category and provide description for session
-	TrackEnd(Category, string) (Item, error)
+	TrackEnd(Category, string) (Session, error)
 }
 
 type ListOptions struct {

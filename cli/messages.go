@@ -13,7 +13,7 @@ var colorDim = "\x1b[2m"
 var colorBold = "\x1b[1m"
 var colorReset = "\x1b[0m"
 
-func printItems(i []nyow.Item) string {
+func printItems(i []nyow.Session) string {
 	var b strings.Builder
 	for _, x := range i {
 		b.WriteString(printItem(x))
@@ -24,7 +24,7 @@ func printItems(i []nyow.Item) string {
 }
 
 // prints out a formatted Item
-func printItem(i nyow.Item) string {
+func printItem(i nyow.Session) string {
 	var b strings.Builder
 	fmt.Fprintf(&b, "%v%v ", colorBold, i.Description)
 	fmt.Fprintf(&b, "%v %v %v", colorPrimary, string(i.Category), colorReset)

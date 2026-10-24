@@ -42,7 +42,7 @@ func LoadState(appname string) (nyow.Provider, error) {
 	b, err := os.ReadFile(sd)
 	if errors.Is(err, os.ErrNotExist) {
 		return &JSON{
-			Items:    make(map[uuid.UUID]nyow.Item),
+			Items:    make(map[uuid.UUID]nyow.Session),
 			Trackers: make(map[nyow.Category]time.Time),
 		}, nil
 
@@ -59,7 +59,7 @@ func LoadState(appname string) (nyow.Provider, error) {
 	// make if nil after unmarshalling so it doesn't get
 	// overriden with nil
 	if d.Items == nil {
-		d.Items = make(map[uuid.UUID]nyow.Item)
+		d.Items = make(map[uuid.UUID]nyow.Session)
 	}
 	if d.Trackers == nil {
 		d.Trackers = make(map[nyow.Category]time.Time)

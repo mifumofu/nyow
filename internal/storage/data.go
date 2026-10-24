@@ -10,11 +10,11 @@ import (
 )
 
 type JSON struct {
-	Items    map[uuid.UUID]nyow.Item
+	Items    map[uuid.UUID]nyow.Session
 	Trackers map[nyow.Category]time.Time
 }
 
-func (j *JSON) Add(i nyow.Item) error {
+func (j *JSON) Add(i nyow.Session) error {
 	if i.ID == uuid.Nil() {
 		i.ID = uuid.New()
 	}
@@ -27,14 +27,14 @@ func (j *JSON) Remove(u uuid.UUID) error {
 	return nil
 }
 
-func (j *JSON) List(options *nyow.ListOptions) []nyow.Item {
+func (j *JSON) List(options *nyow.ListOptions) []nyow.Session {
 	s := slices.Collect(maps.Values(j.Items))
 
 	if options == nil {
 		return s
 	}
 
-	var v []nyow.Item
+	var v []nyow.Session
 	for _, i := range s {
 		// filter based on occur before
 		if options.Before != nil && !i.Start.Before(*options.Before) {
@@ -66,14 +66,14 @@ func (j *JSON) TrackStart(c nyow.Category) error {
 	return nil
 }
 
-func (j *JSON) TrackEnd(c nyow.Category, desc string) (nyow.Item, error) {
+func (j *JSON) TrackEnd(c nyow.Category, desc string) (nyow.Session, error) {
 	t, exists := j.Trackers[c]
 
 	if !exists {
-		return nyow.Item{}, nyow.ErrNotExist
+		return nyow.Session{}, nyow.ErrNotExist
 	}
 
-	i := nyow.Item{
+	i := nyow.Session{
 		Start:       t,
 		End:         time.Now(),
 		Description: desc,
