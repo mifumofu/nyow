@@ -35,7 +35,7 @@ func init() {
 // boxperiod is the period that individual boxes represent
 func summaryMessage(p nyow.Provider, total, rowperiod, boxperiod time.Duration) string {
 	var b strings.Builder
-	fmt.Fprintf(&b, "Overview for time spent over %v.\n", total.String())
+	fmt.Fprintf(&b, "Overview for time spent over %v.\n", bigDurationString(total))
 	b.WriteString("\n                                1 1 1 1 1 1 1 1 1 1 2 2 2 2 2")
 	b.WriteString("\n              1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4\n")
 
@@ -68,4 +68,59 @@ func summaryMessage(p nyow.Provider, total, rowperiod, boxperiod time.Duration) 
 	}
 
 	return b.String()
+}
+
+// fixes a t.String() limitation where hours is the largest unit, goes to a year
+// only includes one unit for simplicity eg. no 1 week 4 hours, only 1 week
+func bigDurationString(d time.Duration) string {
+	u := uint64(d)
+
+	units := []struct {
+		Name     string
+		Duration uint64
+	}{
+		{
+			Name:     "year",
+			Duration: uint64(time.Hour) * 24 * 365,
+		},
+		{
+			Name:     "month",
+			Duration: uint64(time.Hour) * 24 * 7 * 30,
+		},
+		{
+			Name:     "week",
+			Duration: uint64(time.Hour) * 24 * 7,
+		},
+		{
+			Name:     "day",
+			Duration: uint64(time.Hour) * 24,
+		},
+		{
+			Name:     "hour",
+			Duration: uint64(time.Hour),
+		},
+		{
+			Name:     "minute",
+			Duration: uint64(time.Minute),
+		},
+		{
+			Name:     "second",
+			Duration: uint64(time.Second),
+		},
+	}
+
+	for _, i := range units {
+		m := u / i.Duration
+		if m == 1 {
+			return fmt.Sprintf("%v %v", m, i.Name)
+		} else if m > 1 {
+			return fmt.Sprintf("%v %vs", m, i.Name)
+		}
+	}
+
+	// we have already dealt with the problem of big
+	// durations being in an odd unit eg. 1 week -> 168hours
+	// by this point, so we just fallback to the std library implentation
+	// if its small enough to slip by.
+	return d.String()
 }
