@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -33,6 +34,10 @@ func init() {
 			&cli.StringFlag{
 				Name:  "category",
 				Usage: "Sessions in a category, filter multiple by seperating them with commas.",
+			},
+			&cli.BoolFlag{
+				Name:  "json",
+				Usage: "Output JSON.",
 			},
 		},
 		Action: func(ctx context.Context, c *cli.Command) error {
@@ -66,6 +71,14 @@ func init() {
 			}
 
 			items := provider.List(conf)
+			if c.Bool("json") {
+				b, err := json.MarshalIndent(items, "", "\t")
+				if err != nil {
+					return err
+				}
+				fmt.Println(string(b))
+				return err
+			}
 			fmt.Println(printItems(items))
 			return nil
 		},
