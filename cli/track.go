@@ -42,6 +42,7 @@ func init() {
 	}, &cli.Command{
 		Name:      "end",
 		Usage:     "End a session",
+		Aliases:   []string{"stop"},
 		ArgsUsage: "[CATEGORY] [DESCRIPTION]",
 		Arguments: []cli.Argument{
 			&cli.StringArg{
