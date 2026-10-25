@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"slices"
 	"strings"
-	"time"
 	"uuid"
 
 	"github.com/mifumofu/nyow"
@@ -39,16 +38,16 @@ func init() {
 			},
 			&cli.TimestampFlag{
 				Name:  "start",
-				Usage: "Change the start time of the session. Format: " + time.DateTime,
+				Usage: "Change the start time of the session. Format: " + inputDateFormat,
 				Config: cli.TimestampConfig{
-					Layouts: []string{time.DateTime},
+					Layouts: []string{inputDateFormat},
 				},
 			},
 			&cli.TimestampFlag{
 				Name:  "end",
-				Usage: "Change the end time of the session. Format: " + time.DateTime,
+				Usage: "Change the end time of the session. Format: " + inputDateFormat,
 				Config: cli.TimestampConfig{
-					Layouts: []string{time.DateTime},
+					Layouts: []string{inputDateFormat},
 				},
 			},
 		},

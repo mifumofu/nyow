@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/mifumofu/nyow"
 	"github.com/urfave/cli/v3"
@@ -19,16 +18,16 @@ func init() {
 		Flags: []cli.Flag{
 			&cli.TimestampFlag{
 				Name:  "before",
-				Usage: "Sessions that started before time provided. Format: " + time.DateTime,
+				Usage: "Sessions that started before time provided. Format: " + inputDateFormat,
 				Config: cli.TimestampConfig{
-					Layouts: []string{time.DateTime},
+					Layouts: []string{inputDateFormat},
 				},
 			},
 			&cli.TimestampFlag{
 				Name:  "after",
-				Usage: "Sessions that started after time provided. Format: " + time.DateTime,
+				Usage: "Sessions that started after time provided. Format: " + inputDateFormat,
 				Config: cli.TimestampConfig{
-					Layouts: []string{time.DateTime},
+					Layouts: []string{inputDateFormat},
 				},
 			},
 			&cli.StringFlag{

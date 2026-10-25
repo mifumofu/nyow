@@ -9,6 +9,7 @@ import (
 )
 
 var displayDateFormat = "Monday, 02 Jan 2006 3:04PM"
+var inputDateFormat = "2006-01-02 15:04"
 
 var colorPrimary = "\x1b[45m\x1b[30m"
 var colorDim = "\x1b[2m"

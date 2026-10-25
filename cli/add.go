@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/mifumofu/nyow"
 	"github.com/mifumofu/nyow/internal/storage"
@@ -32,7 +31,7 @@ func init() {
 				UsageText: "Beginning time of the session",
 				Required:  true,
 				Config: cli.TimestampConfig{
-					Layouts: []string{time.DateTime},
+					Layouts: []string{inputDateFormat},
 				},
 			},
 			&cli.TimestampArg{
@@ -40,7 +39,7 @@ func init() {
 				UsageText: "End time of the session",
 				Required:  true,
 				Config: cli.TimestampConfig{
-					Layouts: []string{time.DateTime},
+					Layouts: []string{inputDateFormat},
 				},
 			},
 		},
