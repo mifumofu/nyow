@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/mifumofu/nyow"
 	"github.com/mifumofu/nyow/internal/storage"
@@ -26,15 +27,21 @@ func init() {
 				UsageText: "Description of the session",
 				Required:  true,
 			},
-			&cli.StringArg{
+			&cli.TimestampArg{
 				Name:      "begin",
 				UsageText: "Beginning time of the session",
 				Required:  true,
+				Config: cli.TimestampConfig{
+					Layouts: []string{time.DateTime},
+				},
 			},
-			&cli.StringArg{
+			&cli.TimestampArg{
 				Name:      "end",
 				UsageText: "End time of the session",
 				Required:  true,
+				Config: cli.TimestampConfig{
+					Layouts: []string{time.DateTime},
+				},
 			},
 		},
 		Action: func(ctx context.Context, c *cli.Command) error {
