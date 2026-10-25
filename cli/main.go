@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 
 	"github.com/mifumofu/nyow"
@@ -22,10 +23,12 @@ func main() {
 	var err error
 	provider, err = storage.LoadState(cmd.Name)
 	if err != nil {
-		panic(err)
+		fmt.Println(formatError(err))
+		os.Exit(1)
 	}
 
 	if err := cmd.Run(context.Background(), os.Args); err != nil {
-		panic(err)
+		fmt.Println(formatError(err))
+		os.Exit(1)
 	}
 }

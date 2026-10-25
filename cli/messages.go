@@ -48,3 +48,8 @@ func lineDiff(description, before, after string) string {
 
 	return fmt.Sprintf("\n%v- %v%v%v: %v%v", colorReset, colorBold, description, colorReset, colorYellow, after)
 }
+
+// Formats an error into something more user friendly
+func formatError(err error) string {
+	return fmt.Sprintf("%v%v%vERROR%v: %v", colorReset, colorRed, colorBold, colorReset, err)
+}
