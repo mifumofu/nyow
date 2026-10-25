@@ -64,6 +64,16 @@ func (j *JSON) Get(u uuid.UUID) (nyow.Session, error) {
 	return nyow.Session{}, nyow.ErrNotExist
 }
 
+func (j *JSON) Edit(u uuid.UUID, s nyow.Session) error {
+	_, ok := j.Items[u]
+	if !ok {
+		return nyow.ErrNotExist
+	}
+
+	j.Items[u] = s
+	return nil
+}
+
 func (j *JSON) TrackStart(c nyow.Category) error {
 	if _, exists := j.Trackers[c]; exists {
 		return nyow.ErrTrackAlreadyStarted

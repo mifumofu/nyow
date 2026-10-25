@@ -8,10 +8,16 @@ import (
 	"github.com/mifumofu/nyow"
 )
 
+var displayDateFormat = "Monday, 02 Jan 2006 3:04PM"
+
 var colorPrimary = "\x1b[45m\x1b[30m"
 var colorDim = "\x1b[2m"
 var colorBold = "\x1b[1m"
 var colorReset = "\x1b[0m"
+
+var colorRed = "\x1b[31m"
+var colorGreen = "\x1b[32m"
+var colorYellow = "\x1b[33m"
 
 func printItems(i []nyow.Session) string {
 	var b strings.Builder
@@ -32,4 +38,12 @@ func printItem(i nyow.Session) string {
 
 	fmt.Fprintf(&b, "\n%vAt %v until %v for %v.", colorReset, i.Start.Format(time.DateTime), i.End.Format(time.DateTime), i.Duration().Truncate(time.Second))
 	return b.String()
+}
+
+func lineDiff(description, before, after string) string {
+	if before != after {
+		return fmt.Sprintf("\n%v- %v%v%v: %v%v %v-> %v%v", colorReset, colorBold, description, colorReset, colorRed, before, colorReset, colorGreen, after)
+	}
+
+	return fmt.Sprintf("\n%v- %v%v%v: %v%v", colorReset, colorBold, description, colorReset, colorYellow, after)
 }

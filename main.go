@@ -26,6 +26,7 @@ func (i Session) Duration() time.Duration {
 type Provider interface {
 	Add(Session) error
 	Remove(uuid.UUID) error
+	Edit(uuid.UUID, Session) error
 	Get(uuid.UUID) (Session, error)
 	List(*ListOptions) []Session
 
