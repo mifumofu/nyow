@@ -58,3 +58,14 @@ func lineDiff(description, before, after string) string {
 func formatError(err error) string {
 	return fmt.Sprintf("%v%v%vERROR%v: %v", colorReset, colorRed, colorBold, colorReset, err)
 }
+
+// returns a pretty list of all ongoing trackers
+func printsTrackers(c map[nyow.Category]time.Time) string {
+	var b strings.Builder
+
+	for i, x := range c {
+		fmt.Fprintf(&b, "%v %v %v Started at %v%v%v.", colorHighlight, i, colorReset, colorInfo, x, colorReset)
+	}
+
+	return b.String()
+}

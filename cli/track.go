@@ -81,5 +81,23 @@ func init() {
 			fmt.Printf("Cancelled tracking session of category %v%v%v.\n", colorInfo, cat, colorReset)
 			return nil
 		},
+	}, &cli.Command{
+		Name:  "trackers",
+		Usage: "Lists all ongoing trackers.",
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:  "json",
+				Usage: "Output JSON.",
+			},
+		},
+		Action: func(ctx context.Context, c *cli.Command) error {
+			trackers, err := provider.TrackList()
+			if err != nil {
+				return err
+			}
+
+			fmt.Println(printsTrackers(trackers))
+			return nil
+		},
 	})
 }

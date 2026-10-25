@@ -39,6 +39,7 @@ func NewFile(appname string) (nyow.Provider, error) {
 		return &JSON{
 			Items:    make(map[uuid.UUID]nyow.Session),
 			Trackers: make(map[nyow.Category]time.Time),
+			Goal:     make(map[uuid.UUID]nyow.Goal),
 			path:     sd,
 		}, nil
 

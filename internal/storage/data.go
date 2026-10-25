@@ -12,6 +12,7 @@ import (
 type JSON struct {
 	Items    map[uuid.UUID]nyow.Session
 	Trackers map[nyow.Category]time.Time
+	Goal     map[uuid.UUID]nyow.Goal
 	path     string
 }
 
@@ -75,6 +76,7 @@ func (j *JSON) Edit(u uuid.UUID, s nyow.Session) error {
 	return j.save()
 }
 
+// tracking
 func (j *JSON) TrackStart(c nyow.Category) error {
 	if _, exists := j.Trackers[c]; exists {
 		return nyow.ErrTrackAlreadyStarted
@@ -114,4 +116,8 @@ func (j *JSON) TrackCancel(c nyow.Category) error {
 
 	delete(j.Trackers, c)
 	return j.save()
+}
+
+func (j *JSON) TrackList() (map[nyow.Category]time.Time, error) {
+	return j.Trackers, nil
 }

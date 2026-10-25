@@ -23,6 +23,18 @@ func (i Session) Duration() time.Duration {
 	return i.End.Sub(i.Start)
 }
 
+type Goal struct {
+	ID uuid.UUID
+	Category
+	Amount time.Duration
+	Begin  time.Time
+}
+
+type GoalProgress struct {
+	Goal
+	Progress time.Duration
+}
+
 type Provider interface {
 	Add(Session) error
 	Remove(uuid.UUID) error
@@ -38,6 +50,9 @@ type Provider interface {
 
 	// cancels a tracking session without saving it
 	TrackCancel(Category) error
+
+	// lists all ongoing tracking sessions
+	TrackList() (map[Category]time.Time, error)
 }
 
 type ListOptions struct {
