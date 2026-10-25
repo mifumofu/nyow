@@ -13,12 +13,12 @@ import (
 func init() {
 	cmds = append(cmds, &cli.Command{
 		Name:      "start",
-		Usage:     "Start tracking a session",
+		Usage:     "Start tracking a new session",
 		ArgsUsage: "[CATEGORY]",
 		Arguments: []cli.Argument{
 			&cli.StringArg{
 				Name:      "category",
-				UsageText: "Category of the session.",
+				UsageText: "Category of the session",
 				Required:  true,
 			},
 		},
@@ -29,7 +29,7 @@ func init() {
 				return err
 			}
 
-			fmt.Printf("started tracking session for \"%v\"\n", cat)
+			fmt.Printf("Started tracking session for category %v%v%v.\n", colorInfo, cat, colorReset)
 			return nil
 		},
 		After: func(ctx context.Context, c *cli.Command) error {
@@ -47,12 +47,12 @@ func init() {
 		Arguments: []cli.Argument{
 			&cli.StringArg{
 				Name:      "category",
-				UsageText: "Category of the session.",
+				UsageText: "Category of the session",
 				Required:  true,
 			},
 			&cli.StringArg{
 				Name:      "description",
-				UsageText: "Description of the session.",
+				UsageText: "Description of the session",
 				Required:  true,
 			},
 		},
@@ -64,7 +64,7 @@ func init() {
 				return err
 			}
 
-			fmt.Printf("ended session for \"%v\" after %v.\n", cat, i.Duration().Round(time.Second))
+			fmt.Printf("Ended session for %v%v%v after %v%v.\n", colorInfo, cat, colorReset, colorInfo, i.Duration().Round(time.Second))
 			return nil
 		},
 		After: func(ctx context.Context, c *cli.Command) error {
@@ -81,7 +81,7 @@ func init() {
 		Arguments: []cli.Argument{
 			&cli.StringArg{
 				Name:      "category",
-				UsageText: "Category of the session.",
+				UsageText: "Category of the session",
 				Required:  true,
 			},
 		},
@@ -93,7 +93,7 @@ func init() {
 				return err
 			}
 
-			fmt.Printf("Cancelled tracking session of category \"%v\".\n", cat)
+			fmt.Printf("Cancelled tracking session of category %v%v%v.\n", colorInfo, cat, colorReset)
 			return nil
 		},
 		After: func(ctx context.Context, c *cli.Command) error {

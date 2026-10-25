@@ -18,7 +18,7 @@ func init() {
 		Arguments: []cli.Argument{
 			&cli.StringArg{
 				Name:      "category",
-				UsageText: "Category of the session.",
+				UsageText: "Category of the session",
 				Required:  true,
 			},
 			&cli.StringArg{
@@ -51,7 +51,7 @@ func init() {
 				End:         c.TimestampArg("end"),
 			}
 
-			fmt.Printf("added session with description \"%v\" of category \"%v\"", item.Description, item.Category)
+			fmt.Printf("Created session with description %v%v%v of category %v%v%v.\n", colorInfo, item.Description, colorReset, colorInfo, item.Category, colorReset)
 			return provider.Add(item)
 		},
 		After: func(ctx context.Context, c *cli.Command) error {

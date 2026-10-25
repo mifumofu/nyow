@@ -13,7 +13,7 @@ func init() {
 	cmds = append(cmds, &cli.Command{
 		Name:      "remove",
 		Aliases:   []string{"delete", "r"},
-		Usage:     "Remove a session",
+		Usage:     "Delete a session",
 		ArgsUsage: "[ID]",
 		Arguments: []cli.Argument{
 			&cli.StringArg{
@@ -27,7 +27,7 @@ func init() {
 				return err
 			}
 
-			fmt.Printf("removed session %v\n", u)
+			fmt.Printf("Removed session %v%v%v.\n", colorInfo, u, colorReset)
 			return provider.Remove(u)
 		},
 		After: func(ctx context.Context, c *cli.Command) error {

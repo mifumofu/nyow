@@ -11,7 +11,8 @@ import (
 var displayDateFormat = "Monday, 02 Jan 2006 3:04PM"
 var inputDateFormat = "2006-01-02 15:04"
 
-var colorPrimary = "\x1b[45m\x1b[30m"
+var colorInfo = colorBold + colorMagenta
+var colorHighlight = "\x1b[45m\x1b[30m"
 var colorDim = "\x1b[2m"
 var colorBold = "\x1b[1m"
 var colorReset = "\x1b[0m"
@@ -19,6 +20,7 @@ var colorReset = "\x1b[0m"
 var colorRed = "\x1b[31m"
 var colorGreen = "\x1b[32m"
 var colorYellow = "\x1b[33m"
+var colorMagenta = "\x1b[35m"
 
 func printItems(i []nyow.Session) string {
 	var b strings.Builder
@@ -34,7 +36,7 @@ func printItems(i []nyow.Session) string {
 func printItem(i nyow.Session) string {
 	var b strings.Builder
 	fmt.Fprintf(&b, "%v%v ", colorBold, i.Description)
-	fmt.Fprintf(&b, "%v %v %v", colorPrimary, string(i.Category), colorReset)
+	fmt.Fprintf(&b, "%v %v %v", colorHighlight, string(i.Category), colorReset)
 	fmt.Fprintf(&b, " %v%v", colorDim, i.ID)
 
 	fmt.Fprintf(&b, "\n%vAt %v until %v for %v.", colorReset, i.Start.Format(displayDateFormat), i.End.Format(displayDateFormat), i.Duration().Truncate(time.Second))
