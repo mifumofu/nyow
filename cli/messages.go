@@ -17,10 +17,13 @@ var colorDim = "\x1b[2m"
 var colorBold = "\x1b[1m"
 var colorReset = "\x1b[0m"
 
+var colorPool = []string{colorRed, colorGreen, colorYellow, colorBlue, colorMagenta, colorCyan}
 var colorRed = "\x1b[31m"
 var colorGreen = "\x1b[32m"
 var colorYellow = "\x1b[33m"
+var colorBlue = "\x1b[34m"
 var colorMagenta = "\x1b[35m"
+var colorCyan = "\x1b[36m"
 
 func printItems(i []nyow.Session) string {
 	var b strings.Builder

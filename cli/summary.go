@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"math/rand"
+	"slices"
 	"strings"
 	"time"
 
@@ -35,12 +37,15 @@ func init() {
 // boxperiod is the period that individual boxes represent
 func summaryMessage(p nyow.Provider, total, rowperiod, boxperiod time.Duration) string {
 	var b strings.Builder
-	fmt.Fprintf(&b, "Overview for time spent over %v.\n", bigDurationString(total))
+	fmt.Fprintf(&b, "Overview for time spent over %v.", bigDurationString(total))
 	b.WriteString("\n                      1\x1b[2m1\x1b[0m1\x1b[2m1\x1b[0m1\x1b[2m1\x1b[0m1\x1b[2m1\x1b[0m1\x1b[2m1\x1b[0m2\x1b[2m2\x1b[0m2\x1b[2m2\x1b[0m2")
 	b.WriteString("\n             \x1b[2m1\x1b[0m2\x1b[2m3\x1b[0m4\x1b[2m5\x1b[0m6\x1b[2m7\x1b[0m8\x1b[2m9\x1b[0m0\x1b[2m1\x1b[0m2\x1b[2m3\x1b[0m4\x1b[2m5\x1b[0m6\x1b[2m7\x1b[0m8\x1b[2m9\x1b[0m0\x1b[2m1\x1b[0m2\x1b[2m3\x1b[0m4\n")
 
 	pbefore := time.Now()
 	pafter := time.Now().Add(-boxperiod)
+
+	var categoryColors = make(map[nyow.Category]string)
+	var unusedColors = colorPool
 
 	// write row key
 	for range total / rowperiod {
@@ -57,14 +62,37 @@ func summaryMessage(p nyow.Provider, total, rowperiod, boxperiod time.Duration) 
 			})
 
 			if len(i) == 0 {
-				b.WriteString(colorDim)
-			} else {
 				b.WriteString(colorReset)
+				b.WriteString(colorDim)
+				b.WriteString("■")
+				continue
 			}
+
+			// this is not very good, ideally we use the category with
+			// the most usage in a period, but i am lazy.
+			boxCategory := i[0].Category
+			color, ok := categoryColors[boxCategory]
+			if !ok {
+				ittr := rand.Intn(len(unusedColors) - 1)
+				color = unusedColors[ittr]
+				categoryColors[boxCategory] = color
+				unusedColors = slices.Delete(unusedColors, ittr, ittr+1)
+			}
+
+			b.WriteString(colorReset)
+			b.WriteString(color)
 			b.WriteString("■")
 		}
 
 		b.WriteString("\n")
+	}
+
+	b.WriteString(colorReset)
+	b.WriteString("Categories: ")
+	for i, x := range categoryColors {
+		b.WriteString(x)
+		b.WriteString(string(i))
+		b.WriteString(" ")
 	}
 
 	return b.String()
