@@ -19,16 +19,16 @@ func init() {
 		Flags: []cli.Flag{
 			&cli.TimestampFlag{
 				Name:  "before",
-				Usage: "Sessions that started before time provided. Format: " + time.DateOnly,
+				Usage: "Sessions that started before time provided. Format: " + time.DateTime,
 				Config: cli.TimestampConfig{
-					Layouts: []string{time.DateOnly},
+					Layouts: []string{time.DateTime},
 				},
 			},
 			&cli.TimestampFlag{
 				Name:  "after",
 				Usage: "Sessions that started after time provided. Format: " + time.DateTime,
 				Config: cli.TimestampConfig{
-					Layouts: []string{time.DateOnly},
+					Layouts: []string{time.DateTime},
 				},
 			},
 			&cli.StringFlag{
