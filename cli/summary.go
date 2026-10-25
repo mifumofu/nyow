@@ -21,7 +21,7 @@ func init() {
 			},
 		},
 		Action: func(ctx context.Context, c *cli.Command) error {
-			msg := summaryMessage(provider, time.Hour*24*7, time.Hour*24, time.Hour/2)
+			msg := summaryMessage(provider, time.Hour*24*7, time.Hour*24, time.Hour)
 
 			fmt.Println(msg)
 			return nil
@@ -36,8 +36,8 @@ func init() {
 func summaryMessage(p nyow.Provider, total, rowperiod, boxperiod time.Duration) string {
 	var b strings.Builder
 	fmt.Fprintf(&b, "Overview for time spent over %v.\n", bigDurationString(total))
-	b.WriteString("\n                                1 1 1 1 1 1 1 1 1 1 2 2 2 2 2")
-	b.WriteString("\n              1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4\n")
+	b.WriteString("\n                      1\x1b[2m1\x1b[0m1\x1b[2m1\x1b[0m1\x1b[2m1\x1b[0m1\x1b[2m1\x1b[0m1\x1b[2m1\x1b[0m2\x1b[2m2\x1b[0m2\x1b[2m2\x1b[0m2")
+	b.WriteString("\n             \x1b[2m1\x1b[0m2\x1b[2m3\x1b[0m4\x1b[2m5\x1b[0m6\x1b[2m7\x1b[0m8\x1b[2m9\x1b[0m0\x1b[2m1\x1b[0m2\x1b[2m3\x1b[0m4\x1b[2m5\x1b[0m6\x1b[2m7\x1b[0m8\x1b[2m9\x1b[0m0\x1b[2m1\x1b[0m2\x1b[2m3\x1b[0m4\n")
 
 	pbefore := time.Now()
 	pafter := time.Now().Add(-boxperiod)
