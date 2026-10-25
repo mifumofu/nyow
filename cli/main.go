@@ -21,7 +21,7 @@ func main() {
 	}
 
 	var err error
-	provider, err = storage.LoadState(cmd.Name)
+	provider, err = storage.NewFile(cmd.Name)
 	if err != nil {
 		fmt.Println(formatError(err))
 		os.Exit(1)

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"uuid"
 
-	"github.com/mifumofu/nyow/internal/storage"
 	"github.com/urfave/cli/v3"
 )
 
@@ -29,14 +28,6 @@ func init() {
 
 			fmt.Printf("Removed session %v%v%v.\n", colorInfo, u, colorReset)
 			return provider.Remove(u)
-		},
-		After: func(ctx context.Context, c *cli.Command) error {
-			p, ok := provider.(*storage.JSON)
-			if ok {
-				return storage.SaveState(*p, "nyow")
-			}
-
-			return nil
 		},
 	})
 }

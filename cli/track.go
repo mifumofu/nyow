@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/mifumofu/nyow"
-	"github.com/mifumofu/nyow/internal/storage"
 	"github.com/urfave/cli/v3"
 )
 
@@ -30,13 +29,6 @@ func init() {
 			}
 
 			fmt.Printf("Started tracking session for category %v%v%v.\n", colorInfo, cat, colorReset)
-			return nil
-		},
-		After: func(ctx context.Context, c *cli.Command) error {
-			p, ok := provider.(*storage.JSON)
-			if ok {
-				return storage.SaveState(*p, "nyow")
-			}
 			return nil
 		},
 	}, &cli.Command{
@@ -67,13 +59,6 @@ func init() {
 			fmt.Printf("Ended session for %v%v%v after %v%v.\n", colorInfo, cat, colorReset, colorInfo, i.Duration().Round(time.Second))
 			return nil
 		},
-		After: func(ctx context.Context, c *cli.Command) error {
-			p, ok := provider.(*storage.JSON)
-			if ok {
-				return storage.SaveState(*p, "nyow")
-			}
-			return nil
-		},
 	}, &cli.Command{
 		Name:      "cancel",
 		Usage:     "Cancel an ongoing tracking session without saving anything.",
@@ -94,13 +79,6 @@ func init() {
 			}
 
 			fmt.Printf("Cancelled tracking session of category %v%v%v.\n", colorInfo, cat, colorReset)
-			return nil
-		},
-		After: func(ctx context.Context, c *cli.Command) error {
-			p, ok := provider.(*storage.JSON)
-			if ok {
-				return storage.SaveState(*p, "nyow")
-			}
 			return nil
 		},
 	})

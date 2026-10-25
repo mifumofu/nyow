@@ -9,7 +9,6 @@ import (
 	"uuid"
 
 	"github.com/mifumofu/nyow"
-	"github.com/mifumofu/nyow/internal/storage"
 	"github.com/urfave/cli/v3"
 )
 
@@ -98,13 +97,6 @@ func init() {
 			}
 
 			fmt.Println("Updated the following properties:", b.String())
-			return nil
-		},
-		After: func(ctx context.Context, c *cli.Command) error {
-			p, ok := provider.(*storage.JSON)
-			if ok {
-				return storage.SaveState(*p, "nyow")
-			}
 			return nil
 		},
 	})

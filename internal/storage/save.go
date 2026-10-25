@@ -13,27 +13,22 @@ import (
 )
 
 // save the user's state to a location based on their platform's standards
-func SaveState(i JSON, appname string) error {
-	sd, err := userStateFile(appname)
+func (j JSON) save() error {
+	b, err := json.Marshal(j)
 	if err != nil {
 		return err
 	}
 
-	b, err := json.Marshal(i)
+	err = os.MkdirAll(path.Dir(j.path), 0777)
 	if err != nil {
 		return err
 	}
 
-	err = os.MkdirAll(path.Dir(sd), 0777)
-	if err != nil {
-		return err
-	}
-
-	return os.WriteFile(sd, b, 0666)
+	return os.WriteFile(j.path, b, 0666)
 }
 
 // loads the user's state from a file based on their platform's standards
-func LoadState(appname string) (nyow.Provider, error) {
+func NewFile(appname string) (nyow.Provider, error) {
 	sd, err := userStateFile(appname)
 	if err != nil {
 		return nil, err
@@ -44,6 +39,7 @@ func LoadState(appname string) (nyow.Provider, error) {
 		return &JSON{
 			Items:    make(map[uuid.UUID]nyow.Session),
 			Trackers: make(map[nyow.Category]time.Time),
+			path:     sd,
 		}, nil
 
 	} else if err != nil {
@@ -65,6 +61,7 @@ func LoadState(appname string) (nyow.Provider, error) {
 		d.Trackers = make(map[nyow.Category]time.Time)
 	}
 
+	d.path = sd
 	return &d, err
 }
 

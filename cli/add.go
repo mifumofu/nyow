@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/mifumofu/nyow"
-	"github.com/mifumofu/nyow/internal/storage"
 	"github.com/urfave/cli/v3"
 )
 
@@ -53,13 +52,6 @@ func init() {
 
 			fmt.Printf("Created session with description %v%v%v of category %v%v%v.\n", colorInfo, item.Description, colorReset, colorInfo, item.Category, colorReset)
 			return provider.Add(item)
-		},
-		After: func(ctx context.Context, c *cli.Command) error {
-			p, ok := provider.(*storage.JSON)
-			if ok {
-				return storage.SaveState(*p, "nyow")
-			}
-			return nil
 		},
 	})
 }

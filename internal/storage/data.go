@@ -12,6 +12,7 @@ import (
 type JSON struct {
 	Items    map[uuid.UUID]nyow.Session
 	Trackers map[nyow.Category]time.Time
+	path     string
 }
 
 func (j *JSON) Add(i nyow.Session) error {
@@ -19,12 +20,12 @@ func (j *JSON) Add(i nyow.Session) error {
 		i.ID = uuid.New()
 	}
 	j.Items[i.ID] = i
-	return nil
+	return j.save()
 }
 
 func (j *JSON) Remove(u uuid.UUID) error {
 	delete(j.Items, u)
-	return nil
+	return j.save()
 }
 
 func (j *JSON) List(options *nyow.ListOptions) []nyow.Session {
@@ -71,7 +72,7 @@ func (j *JSON) Edit(u uuid.UUID, s nyow.Session) error {
 	}
 
 	j.Items[u] = s
-	return nil
+	return j.save()
 }
 
 func (j *JSON) TrackStart(c nyow.Category) error {
@@ -80,7 +81,7 @@ func (j *JSON) TrackStart(c nyow.Category) error {
 	}
 
 	j.Trackers[c] = time.Now()
-	return nil
+	return j.save()
 }
 
 func (j *JSON) TrackEnd(c nyow.Category, desc string) (nyow.Session, error) {
@@ -98,7 +99,12 @@ func (j *JSON) TrackEnd(c nyow.Category, desc string) (nyow.Session, error) {
 	}
 	delete(j.Trackers, c)
 
-	return i, j.Add(i)
+	err := j.Add(i)
+	if err != nil {
+		return i, err
+	}
+
+	return i, j.save()
 }
 
 func (j *JSON) TrackCancel(c nyow.Category) error {
@@ -107,5 +113,5 @@ func (j *JSON) TrackCancel(c nyow.Category) error {
 	}
 
 	delete(j.Trackers, c)
-	return nil
+	return j.save()
 }
