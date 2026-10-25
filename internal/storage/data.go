@@ -57,6 +57,13 @@ func (j *JSON) List(options *nyow.ListOptions) []nyow.Session {
 	return v
 }
 
+func (j *JSON) Get(u uuid.UUID) (nyow.Session, error) {
+	if s, ok := j.Items[u]; ok {
+		return s, nil
+	}
+	return nyow.Session{}, nyow.ErrNotExist
+}
+
 func (j *JSON) TrackStart(c nyow.Category) error {
 	if _, exists := j.Trackers[c]; exists {
 		return nyow.ErrTrackAlreadyStarted
