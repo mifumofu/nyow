@@ -36,7 +36,7 @@ func printItem(i nyow.Session) string {
 	fmt.Fprintf(&b, "%v %v %v", colorPrimary, string(i.Category), colorReset)
 	fmt.Fprintf(&b, " %v%v", colorDim, i.ID)
 
-	fmt.Fprintf(&b, "\n%vAt %v until %v for %v.", colorReset, i.Start.Format(time.DateTime), i.End.Format(time.DateTime), i.Duration().Truncate(time.Second))
+	fmt.Fprintf(&b, "\n%vAt %v until %v for %v.", colorReset, i.Start.Format(displayDateFormat), i.End.Format(displayDateFormat), i.Duration().Truncate(time.Second))
 	return b.String()
 }
 
