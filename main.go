@@ -35,6 +35,9 @@ type Provider interface {
 
 	// ends a tracker for a category and provide description for session
 	TrackEnd(Category, string) (Session, error)
+
+	// cancels a tracking session without saving it
+	TrackCancel(Category) error
 }
 
 type ListOptions struct {

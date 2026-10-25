@@ -100,3 +100,12 @@ func (j *JSON) TrackEnd(c nyow.Category, desc string) (nyow.Session, error) {
 
 	return i, j.Add(i)
 }
+
+func (j *JSON) TrackCancel(c nyow.Category) error {
+	if _, exists := j.Trackers[c]; !exists {
+		return nyow.ErrNotExist
+	}
+
+	delete(j.Trackers, c)
+	return nil
+}

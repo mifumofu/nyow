@@ -74,5 +74,34 @@ func init() {
 			}
 			return nil
 		},
+	}, &cli.Command{
+		Name:      "cancel",
+		Usage:     "Cancel an ongoing tracking session without saving anything.",
+		ArgsUsage: "[CATEGORY]",
+		Arguments: []cli.Argument{
+			&cli.StringArg{
+				Name:      "category",
+				UsageText: "Category of the session.",
+				Required:  true,
+			},
+		},
+		Action: func(ctx context.Context, c *cli.Command) error {
+			cat := nyow.Category(c.StringArg("category"))
+
+			err := provider.TrackCancel(cat)
+			if err != nil {
+				return err
+			}
+
+			fmt.Printf("Cancelled tracking session of category \"%v\".\n", cat)
+			return nil
+		},
+		After: func(ctx context.Context, c *cli.Command) error {
+			p, ok := provider.(*storage.JSON)
+			if ok {
+				return storage.SaveState(*p, "nyow")
+			}
+			return nil
+		},
 	})
 }
